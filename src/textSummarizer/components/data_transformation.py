@@ -1,6 +1,6 @@
 import os
 from textSummarizer.logging import logger
-from transformers import AutoTokenizer
+from transformers import PegasusTokenizer
 from datasets import load_dataset, load_from_disk
 from textSummarizer.entity import DataTransformationConfig
 
@@ -9,7 +9,7 @@ from textSummarizer.entity import DataTransformationConfig
 class DataTransformation:
     def __init__(self, config: DataTransformationConfig):
         self.config = config
-        self.tokenizer = AutoTokenizer.from_pretrained(config.tokenizer_name)
+        self.tokenizer = PegasusTokenizer.from_pretrained(config.tokenizer_name)
 
 
     
