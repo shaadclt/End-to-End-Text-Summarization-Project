@@ -6,7 +6,7 @@ from textSummarizer.pipeline.stage_05_model_evaluation import ModelEvaluationTra
 from textSummarizer.logging import logger
 
 
-STAGE_NAME = "Data Ingestion stage"
+STAGE_NAME = "Data Ingestion Stage"
 try:
    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<") 
    data_ingestion = DataIngestionTrainingPipeline()
@@ -17,7 +17,7 @@ except Exception as e:
         raise e
      
      
-STAGE_NAME = "Data Validation stage"
+STAGE_NAME = "Data Validation Stage"
 try:
    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<") 
    data_validation = DataValidationTrainingPipeline()
@@ -28,7 +28,7 @@ except Exception as e:
         raise e
      
      
-STAGE_NAME = "Data Transformation stage"
+STAGE_NAME = "Data Transformation Stage"
 try:
    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<") 
    data_transformation = DataTransformationTrainingPipeline()
@@ -39,7 +39,7 @@ except Exception as e:
         raise e
      
      
-STAGE_NAME = "Model Trainer stage"
+STAGE_NAME = "Model Trainer Stage"
 try: 
    logger.info(f"*******************")
    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
@@ -51,7 +51,7 @@ except Exception as e:
         raise e
      
      
-STAGE_NAME = "Model Evaluation stage"
+STAGE_NAME = "Model Evaluation Stage"
 try: 
    logger.info(f"*******************")
    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
