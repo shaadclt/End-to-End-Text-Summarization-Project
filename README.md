@@ -18,13 +18,13 @@ This project implements an end-to-end text summarization pipeline using Natural 
 ### Steps to Set Up and Run Locally:
 1. **Clone the Repository**
    ```sh
-   git clone https://github.com/entbappy/End-to-end-Text-Summarization.git
-   cd End-to-end-Text-Summarization
+   git clone https://github.com/shaadclt/End-to-End-Text-Summarization-Project.git
+   cd End-to-End-Text-Summarization-Project
    ```
 2. **Create a Conda Environment**
    ```sh
-   conda create -n summary python=3.8 -y
-   conda activate summary
+   conda create -n environment_name python=3.8 -y
+   conda activate environment_name
    ```
 3. **Install Dependencies**
    ```sh
@@ -32,10 +32,10 @@ This project implements an end-to-end text summarization pipeline using Natural 
    ```
 4. **Run the Application**
    ```sh
-   python app.py
+   uvicorn app:app --host 0.0.0.0 --port 8080
    ```
 5. **Access the Application**
-   - Open `http://localhost:5000` in a web browser.
+   - Open `http://localhost:8080` in a web browser.
 
 ---
 ## AWS Deployment with CI/CD
@@ -92,52 +92,115 @@ This project is deployed using AWS EC2, AWS ECR, and GitHub Actions for continuo
    - `AWS_REGION`
    - `AWS_ECR_LOGIN_URI`
    - `ECR_REPOSITORY_NAME`
-2. **Create `.github/workflows/deploy.yml`**
+2. **Create `.github/workflows/main.yaml`**
    ```yaml
-   name: Deploy to AWS EC2
+   name: workflow
+
    on:
      push:
        branches:
          - main
+       paths-ignore:
+         - 'README.md'
+   
+   permissions:
+     id-token: write
+     contents: read
+   
    jobs:
-     deploy:
+     integration:
+       name: Continuous Integration
        runs-on: ubuntu-latest
        steps:
-         - name: Checkout Repository
+         - name: Checkout Code
            uses: actions/checkout@v3
 
-         - name: Login to AWS ECR
-           run: |
-             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_LOGIN_URI }}
+      - name: Lint code
+        run: echo "Linting repository"
 
-         - name: Build and Push Docker Image
-           run: |
-             docker build -t ${{ secrets.ECR_REPOSITORY_NAME }} .
-             docker tag ${{ secrets.ECR_REPOSITORY_NAME }}:latest ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-             docker push ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+      - name: Run unit tests
+        run: echo "Running unit tests"
 
-         - name: Deploy to EC2
-           uses: appleboy/ssh-action@master
-           with:
-             host: ${{ secrets.EC2_PUBLIC_IP }}
-             username: ubuntu
-             key: ${{ secrets.SSH_PRIVATE_KEY }}
-             script: |
-               docker pull ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-               docker stop text-s || true
-               docker rm text-s || true
-               docker run -d -p 80:5000 --name text-s ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+     build-and-push-ecr-image:
+       name: Continuous Delivery
+       needs: integration
+       runs-on: ubuntu-latest
+       steps:
+         - name: Checkout Code
+           uses: actions/checkout@v3
+
+      - name: Install Utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq unzip
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+          IMAGE_TAG: latest
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          
+          
+     Continuous-Deployment:
+       needs: build-and-push-ecr-image
+       runs-on: self-hosted
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      
+      - name: Pull latest images
+        run: |
+         docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+         
+      # - name: Stop and remove container if running
+      #   run: |
+      #    docker ps -q --filter "name=texts" | grep -q . && docker stop texts && docker rm -fv texts
+       
+      - name: Run Docker Image to serve users
+        run: |
+         docker run -d -p 8080:8080 --name=texts -e 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' -e 'AWS_REGION=${{ secrets.AWS_REGION }}'  ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+      - name: Clean previous images and containers
+        run: |
+         docker system prune -f
    ```
 
 ## Access the Deployed Application
-- **Public EC2 IP**: `http://<EC2-PUBLIC-IP>`
+- **Public EC2 IP**: `http://<EC2-PUBLIC-IP/8080>`
 - API Documentation: `http://<EC2-PUBLIC-IP>/docs`
 
 ## Author
-Krish Naik  
+Mohamed Shaad  
 Data Scientist  
-Email: krishnaik06@gmail.com  
+Email: shaadclt@gmail.com  
 
----
-This README provides a step-by-step guide to running the project locally and deploying it to AWS with CI/CD automation.
 
