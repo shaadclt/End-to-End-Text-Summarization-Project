@@ -1,6 +1,7 @@
 FROM python:3.8-slim-buster
 
 RUN apt update -y && apt install awscli -y
+RUN apt-get update && apt-get install -y build-essential python3-dev
 WORKDIR /app
 
 COPY . /app
