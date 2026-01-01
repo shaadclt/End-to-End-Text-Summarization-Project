@@ -1,6 +1,7 @@
 # 🚀 End-to-End Text Summarization System (Production-Ready)
 
-A **production-grade NLP system** for abstractive text summarization built using **Hugging Face Transformers**, **PyTorch**, and **modern MLOps practices**.  
+A **production-grade NLP system** for abstractive text summarization built using **Hugging Face Transformers**, **PyTorch**, and **modern MLOps practices**. 
+
 This project demonstrates how to design, train, deploy, and scale a real-world machine learning system with CI/CD automation and cloud deployment.
 
 
