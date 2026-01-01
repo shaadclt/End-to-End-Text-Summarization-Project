@@ -100,3 +100,37 @@ End-to-End-Text-Summarization-Project/
 └── template.py
 ```
 
+
+## ⚙️ Tech Stack
+
+| Category | Tools |
+|------|------|
+| Language | Python |
+| NLP | Hugging Face Transformers (PEGASUS) |
+| Training | PyTorch |
+| Evaluation | ROUGE |
+| API | FastAPI |
+| MLOps | Docker, GitHub Actions |
+| Cloud | AWS EC2 & ECR |
+| Configuration | YAML |
+| Logging | Python Logging |
+
+
+## 🔄 Pipeline Workflow
+
+1. **Data Ingestion** – Downloads and extracts dataset  
+2. **Data Validation** – Ensures data integrity  
+3. **Data Transformation** – Tokenization & preprocessing  
+4. **Model Training** – Fine-tuning PEGASUS  
+5. **Model Evaluation** – ROUGE metrics  
+6. **Inference** – Real-time summarization via REST API  
+
+
+## 🚀 Running Locally
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/End-to-End-Text-Summarization-Project.git
+cd End-to-End-Text-Summarization-Project
+
+
