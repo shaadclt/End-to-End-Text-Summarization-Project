@@ -1,5 +1,14 @@
 # 🚀 End-to-End Text Summarization System (Production-Ready)
 
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-red.svg)](https://pytorch.org/)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-yellow.svg)](https://huggingface.co/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Production-green.svg)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-blue.svg)](https://www.docker.com/)
+[![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20ECR-orange.svg)](https://aws.amazon.com/)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-success.svg)](https://github.com/features/actions)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A **production-grade NLP system** for abstractive text summarization built using **Hugging Face Transformers**, **PyTorch**, and **modern MLOps practices**.
 
 This project implements an end-to-end text summarization pipeline using Natural Language Processing (NLP) techniques. The model is deployed using AWS EC2 and AWS ECR with CI/CD automation through GitHub Actions.
