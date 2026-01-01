@@ -30,7 +30,7 @@ The system is designed with **modularity, scalability, and production-readiness*
 
 
 ## 🏗️ Project Structure
-
+```text
 End-to-End-Text-Summarization-Project/
 │
 ├── .github/
@@ -96,5 +96,5 @@ End-to-End-Text-Summarization-Project/
 ├── requirements.txt                    # Python dependencies
 ├── setup.py                            # Package setup
 └── template.py
-
+```
 
