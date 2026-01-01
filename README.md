@@ -130,7 +130,46 @@ End-to-End-Text-Summarization-Project/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/End-to-End-Text-Summarization-Project.git
+git clone https://github.com/shaadclt/End-to-End-Text-Summarization-Project.git
 cd End-to-End-Text-Summarization-Project
+```
+
+### 2️⃣ Create Virtual Environment
+```bash
+conda create -n summarizer python=3.9 -y
+conda activate summarizer
+```
+
+### 3️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4️⃣ Run the Application
+```bash
+uvicorn app:app --host 0.0.0.0 --port 8080
+```
+
+Access the API at:
+👉 `http://localhost:8080`
+
+## 🐳 Docker Deployment
+```bash
+docker build -t text-summarizer .
+docker run -p 8080:8080 text-summarizer
+```
+
+## ☁️ Cloud Deployment (AWS)
+
+- Dockerized and pushed to Amazon ECR
+- Deployed on EC2
+- CI/CD via GitHub Actions
+- Automated build, test, and deploy pipeline
+
+## 👤 Author
+
+**Mohamed Shaad**
+
+Machine Learning Engineer
 
 
